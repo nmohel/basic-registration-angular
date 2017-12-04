@@ -1,20 +1,64 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<h1>Registration</h1>
+<div *ngIf="submitted" class="done">
+  <p>Thank you for registering with us {{subUser.firstName}}.</p>
+  <p>We just sent you a confirmation email at {{subUser.email}}, and we will send all mail to {{subUser.address.streetAddress}} <span *ngIf="subUser.address.unitNum"> {{subUser.address.unitNum}}</span>, {{subUser.address.city}} {{subUser.address.state}}</p>
+  <p>Have a wonderful day!</p>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<form (submit)="onSubmit(); registrationForm.reset()" #registrationForm="ngForm">
+  <div>
+    <label for="firstName">*First Name:</label>
+    <input type="text" name="firstName" id="firstName" [(ngModel)]="user.firstName" #firstName="ngModel" required>
+    <span class="validationText" [hidden]="firstName.valid || firstName.pristine">First Name is required</span>
+  </div>
+  <div>
+    <label for="lastName">*Last Name:</label>
+    <input type="text" name="lastName" id="lastName" [(ngModel)]="user.lastName" #lastName="ngModel" required>
+    <span class="validationText" [hidden]="lastName.valid || lastName.pristine">Last Name is required</span>
+  </div>
+  <div>
+    <label for="email">*Email:</label>
+    <input type="email" name="email" id="email" [(ngModel)]="user.email" #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+    <span class="validationText" [hidden]="email.valid || email.pristine">Email must be valid</span>
+  </div>
+  <div>
+    <label for="password">*Password:</label>
+    <input type="password" name="password" id="password" [(ngModel)]="user.password" #password="ngModel" required minlength="3">
+    <span class="validationText" [hidden]="password.valid || password.pristine">Password must be at least 16 characters long</span>
+  </div>
+  <div>
+    <label for="confirmpw">*Password Confirmation:</label>
+    <input type="password" name="confirmpw" id="confirmpw" [(ngModel)]="confirm" #confirmpw="ngModel" required>
+    <span class="validationText" [hidden]="confirmpw.value === password.value || confirmpw.pristine">Password Confirmation must match password</span>
+  </div>
+  <div>
+    <label for="street">*Street Address:</label>
+    <input type="text" name="street" id="street" [(ngModel)]="user.address.streetAddress" #street="ngModel" required>
+    <span class="validationText" [hidden]="firstName.valid || firstName.pristine">Address is required</span>
+  </div>
+  <div>
+    <label for="unitNum">Unit/Apt #:</label>
+    <input type="text" name="unitNum" id="unitNum" [(ngModel)]="user.address.unitNum" #unitNum="ngModel">
+  </div>
+  <div>
+    <label for="city">*City:</label>
+    <input type="text" name="city" id="city" [(ngModel)]="user.address.city" #city="ngModel" required>
+    <span class="validationText" [hidden]="city.valid || city.pristine">City is required</span>
+  </div>
+  <div>
+    <label for="state">*State:</label>
+    <select name="state" id="state" [(ngModel)]="user.address.state" #state="ngModel" required>
+      <option *ngFor="let st of states" [value]="st">{{st}}</option>
+    </select>
+    <span class="validationText" [hidden]="state.valid || state.pristine">State is required</span>
+  </div>
+  <div>
+    <span>*I'm feeling lucky:</span>
+    <input type="radio" name="lucky" id="yesLucky" [(ngModel)]="user.lucky" #lucky="ngModel" value="true" requried><label for="yesLucky">Yes</label>
+    <input type="radio" name="lucky" id="noLucky" [(ngModel)]="user.lucky" #lucky="ngModel" value="false" required><label for="noLucky">No</label>    
+    <span class="validationText" [hidden]="lucky.pristine || lucky.valid">Choosing how you feel is required</span>
+  </div>
+  <div>
+    <button type="submit" [disabled]="!registrationForm.form.valid">Submit</button>
+  </div>
+</form>
 
